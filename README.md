@@ -6,8 +6,7 @@ Adapted from CUT.
 
 Multi-scale semantic robustness regularization
 
-![Illustration](f1.PNG)
-
+<img src="f1.PNG" alt="Illustration" style="width:700px;"/>
 
 `v2` vs. `v1`.
 
@@ -18,5 +17,7 @@ sample one scale per gradient step and 256 positions per step
 ## Evaluation
 
 ## Example 
+
+<img src="f2.PNG" alt="statistics" style="width:550px;"/>
 
 
