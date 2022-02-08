@@ -52,8 +52,7 @@ self.feats_perturbed, self.noise_magnitude = self.netG(
 )
 ```
 
-To further reduce the computation burden, at each time we only sample feature vectors at `256` position using the generated `sample_ids` from `PatchSampleF`, similar to the constrastive loss in CUT.
-The pseudo-code is shown below.
+To further reduce the computation burden, at each time we only sample feature vectors at `256` position using the generated `sample_ids` from `PatchSampleF`, similar to the constrastive loss in CUT. The pseudo-code is shown below.
 
 ```Python
 feat_q_pool, feat_k_pool, self.noise_magnitude, sample_ids):
@@ -78,13 +77,20 @@ python train.py --dataroot=$DATA_FOLDER --preprocess=crop --n_epochs=200 --n_epo
     --reg_layers=0,1,2,3,4 --reg_noise=0.001 --reg=0.001 --init_epochs=100 --name=$MODEL_NAME 
 ```
 
-200+200=400
+The path `$DATA_FOLDER` should be structured such that `$DATA_FOLDER/trainA` and `$DATA_FOLDER/trainB` contain images from the source and the target domain, respectively.
+The model is trained with `200 + 200 = 400` epochs and we set `init_epochs` as 1/4 of it.
 
-Input folder
+`reg_layers` ?
 
-Multi-gpu setup currently not supported. Default ...
+Notice that this implementation (as adapted from `CUT`) currently does not support multi-gpu training and the default batch size is 1.
 
 ## Evaluation
+
+```Python
+python test.py --dataroot=$DATA_FOLDER --name=$MODEL_NAME --preprocess=none --output_path=$OUT_PATH --phase=val
+```
+
+valA ...
 
 ## Example 
 
