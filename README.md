@@ -42,7 +42,8 @@ self.optimizer_F.step()
 To improve the computational efficiency of SRUNIT so that it achieves comparable training speed to CUT, at each gradient update, we sample one scale at a time for injecting the noises to the features, as shown below.
 
 ```Python
-choices = [int(l) for l in self.opt.reg_layers.split(',')]  # By default reg_layers = '0,1,2,3,4' (the multi-scale loss)
+# By default reg_layers = '0,1,2,3,4' (the multi-scale loss)
+choices = [int(l) for l in self.opt.reg_layers.split(',')] 
 self.choice = np.random.choice(choices, 1)[0]
 self.feats_perturbed, self.noise_magnitude = self.netG(
     layers=[self.nce_layers[self.choice]],
@@ -63,6 +64,23 @@ sr_reg_loss = loss.mean()
 ```
 
 ## Training
+
+While most of the hyper-parameters are inherited from `CycleGAN` and `CUT`, we have 3 hyper-parameters that can be domain-dependent and might need some level of tuning, namely
+
+    --reg_noise: the max magnitude of injected noises in computing SR loss, usually 0.001
+    --reg: the coefficient for SR loss, 0.001 is usually a good default value
+    --inact_epochs: the number of initial epochs where SR loss is inactivated, usually 1/4 of total training epochs
+
+With the task `Label-to-Image` from Cityscapes as an example, the training script is
+
+```Python
+python train.py --dataroot=$DATA_FOLDER --preprocess=crop --n_epochs=200 --n_epochs_decay=200 \
+    --reg_layers=0,1,2,3,4 --reg_noise=0.001 --reg=0.001 --init_epochs=100 --name=$MODEL_NAME 
+```
+
+200+200=400
+
+Input folder
 
 Multi-gpu setup currently not supported. Default ...
 
