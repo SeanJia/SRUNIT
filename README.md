@@ -12,7 +12,7 @@ Specifically, SRUNIT deals with the common and detrimental sementic flipping iss
 The key idea is to encourage a consistent translation such that contents of the same semantics are not transformed into contents of several different semantics.
 The data flow is illustrated below 
 
-<img src="f1.PNG" alt="Illustration" style="width:700px;"/>
+<img src="examples/f1.PNG" alt="Illustration" style="width:700px;"/>
 
 ### Some Technical Details
 We provide two versions of the implementation for performing backward pass for the semantic robustness (SR) loss `self.compute_reg_loss()`.
@@ -39,7 +39,7 @@ self.optimizer_G.step()
 self.optimizer_F.step()
 ```
 
-To improve the computational efficiency of SRUNIT so that it achieves comparable training speed to CUT, at each gradient update, we sample one scale at a time for injecting the noises to the features, as shown below.
+To improve the computational efficiency of SRUNIT so that it achieves a training speed comparable to CUT, at each gradient update, we sample one scale at a time for injecting the noises to the features, as shown below.
 
 ```Python
 # By default reg_layers = '0,1,2,3,4' (the multi-scale loss)
@@ -55,11 +55,14 @@ self.feats_perturbed, self.noise_magnitude = self.netG(
 To further reduce the computation burden, at each time we only sample feature vectors at `256` position using the generated `sample_ids` from `PatchSampleF`, similar to the constrastive loss in CUT. The pseudo-code is shown below.
 
 ```Python
-feat_q_pool, feat_k_pool, self.noise_magnitude, sample_ids):
-noise_mag = self.noise_magnitude[0]  # Only one scale at a time.
-noise_mag = (noise_mag.flatten(1, 3)[:, sample_ids]).flatten(0, 1)
-loss = euc_dis(f_q, f_k) / noise_mag  # euc_dis is a distance function
-sr_reg_loss = loss.mean()
+def compute_reg_loss(self):
+    # ... some steps omitted here ...
+    
+    # f_q, f_k are features from the original src images and the that with feature perturbation.
+    noise_mag = self.noise_magnitude[0]  # Only one scale at a time.
+    noise_mag = (noise_mag.flatten(1, 3)[:, sample_ids]).flatten(0, 1)
+    loss = euc_dis(f_q, f_k) / noise_mag  # euc_dis is a distance function
+    return loss.mean()
 ```
 
 ## Training
@@ -95,13 +98,13 @@ python test.py --dataroot=$DATA_FOLDER --name=$MODEL_NAME --epoch=latest --prepr
 
 Where similarly there should be `valA` & `valB` or  `testA` & `testB` (`*B` can be empty) under the directory `$DATA_FOLDER` and the phase `--phase` controls where to load the data for inference.
 
-## Example 
+## Results 
 
 We here show the reproduced results on the `Label-to-Image` task from the Cityscapes dataset. As mentioned in the paper, we sub-sample the images to create a statistical discrepancy between the source and the target domain, which is a natural setup in most real-world unpaired image translation tasks.
 Specifically, we use K-means to generate two clusters of images based on the their different semantic distribution (illustrated below).
-We list the original filenames for the source and target images used in our setup in `src_domain_paths.txt` and `tar_domain_paths.txt`, repectively.
+We list the original filenames for the source and target images used in our setup in `examples/src_domain_paths.txt` and `examples/tar_domain_paths.txt`, repectively.
 
-<img src="f2.PNG" alt="statistics" style="width:550px;"/>
+<img src="examples/f2.PNG" alt="statistics" style="width:550px;"/>
 
 The numerical results below clearly demonstrate the advatange of SRUNIT over the previous state-of-the-art method CUT.
 
