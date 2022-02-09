@@ -105,7 +105,7 @@ We list the original filenames for the source and target images used in our setu
 
 The numerical results below clearly demonstrate the advatange of SRUNIT over the previous state-of-the-art method CUT.
 
-|       | PixelAccuracy (%) | ClassAccuracy (%) | Mean IoU |
+|       | PixelAcc (%) | ClassAcc (%) | Mean IoU |
 | ----------- | ----------- | ----------------- | --------- |
 | CUT      | 74.39 | 30.61 | 23.86 |
 | SRUNIT   |   t    | t | t |
