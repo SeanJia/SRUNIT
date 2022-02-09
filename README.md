@@ -106,7 +106,7 @@ We list the original filenames for the source and target images used in our setu
 
 <img src="examples/f2.PNG" alt="statistics" style="width:550px;"/>
 
-The numerical results below clearly demonstrate the advatange of SRUNIT over the previous state-of-the-art method CUT.
+The numerical results below demonstrate the clear advantage of SRUNIT over the previous state-of-the-art method CUT.
 
 |       | PixelAcc (%) | ClassAcc (%) | Mean IoU |
 | ----------- | ----------- | ----------------- | --------- |
