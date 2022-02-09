@@ -86,14 +86,26 @@ Notice that this implementation (as adapted from `CUT`) currently does not suppo
 
 ## Evaluation
 
+The evaluation script is
+
 ```Python
-python test.py --dataroot=$DATA_FOLDER --name=$MODEL_NAME --preprocess=none --output_path=$OUT_PATH --phase=val
+python test.py --dataroot=$DATA_FOLDER --name=$MODEL_NAME --epoch=latest --preprocess=none \
+    --phase=val --output_path=$OUTPUT_PATH
 ```
 
-valA ...
+Where similarly there should be `valA` & `valB` or  `testA` & `testB` (`*B` can be empty) under the directory `$DATA_FOLDER` and the phase `--phase` controls where to load the data for inference.
 
 ## Example 
 
+We here show the reproduced results on the `Label-to-Image` task from the Cityscapes dataset. As mentioned in the paper, we sub-sample the images to create a statistical discrepancy between the source and the target domain, which is a natural setup in most real-world unpaired image translation tasks.
+Specifically, we use K-means to generate two clusters of images based on the their different semantic distribution (illustrated below).
+We list the original filenames for the source and target images used in our setup in `src_domain_paths.txt` and `tar_domain_paths.txt`, repectively.
+
 <img src="f2.PNG" alt="statistics" style="width:550px;"/>
 
+The numerical results below clearly demonstrate the advatange of SRUNIT over the previous state-of-the-art method CUT.
 
+|       | PixelAccuracy (%) | ClassAccuracy (%) | Mean IoU |
+| ----------- | ----------- | ----------------- | --------- |
+| CUT      | 74.39 | 30.61 | 23.86 |
+| SRUNIT   |   t    | t | t |
