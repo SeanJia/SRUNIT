@@ -78,7 +78,7 @@ We list them below with their default valuev shown in parentheses.
 Some notes:
 1. When tuning `reg` and set it too large, the training can become instable and crash near the end.
 2. Usually using all scales (i.e., set `reg_layers='0,1,2,3,4'`) is a good strategy.
-3. We usually set `inact_epochs` to be 1/4 of total training epochs (which is 400 in this case).
+3. We usually set `inact_epochs` to be 1/4 of total training epochs (which is 400 in the `Label-to-Image` example).
 
 With the task `Label-to-Image` from Cityscapes as an example, the training script is
 
