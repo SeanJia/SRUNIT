@@ -67,11 +67,18 @@ def compute_reg_loss(self):
 
 ## Training
 
-While most of the hyper-parameters are inherited from `CycleGAN` and `CUT`, we have 3 hyper-parameters that can be domain-dependent and might need some level of tuning, namely
+While most of the hyper-parameters are inherited from `CycleGAN` and `CUT`, we have 3 hyper-parameters that can be domain-dependent and might need some level of tuning.
+We list them below with their default valuev shown in parentheses.
 
-    --reg_noise: the max magnitude of injected noises in computing SR loss, usually 0.001
-    --reg: the coefficient for SR loss, 0.001 is usually a good default value
-    --inact_epochs: the number of initial epochs where SR loss is inactivated, usually 1/4 of total training epochs
+    --reg_noise (0.001): the max magnitude of injected noises in computing SR loss
+    --reg (0.001): the coefficient for SR loss
+    --reg_layers ('0,1,2,3,4'): what layers/scales to use in multi-scale SR loss
+    --inact_epochs (100): the number of initial epochs where SR loss is inactivated
+    
+Some notes:
+1. When tuning `reg` and set it too large, the training can become instable and crash near the end.
+2. Usually using all scales (i.e., set `reg_layers='0,1,2,3,4'`) is a good strategy.
+3. We usually set `inact_epochs` to be 1/4 of total training epochs (which is 400 in this case).
 
 With the task `Label-to-Image` from Cityscapes as an example, the training script is
 
@@ -82,8 +89,6 @@ python train.py --dataroot=$DATA_FOLDER --preprocess=crop --n_epochs=200 --n_epo
 
 The path `$DATA_FOLDER` should be structured such that `$DATA_FOLDER/trainA` and `$DATA_FOLDER/trainB` contain images from the source and the target domain, respectively.
 The model is trained with `200 + 200 = 400` epochs and we set `init_epochs` as 1/4 of it.
-
-`reg_layers` ?
 
 Notice that this implementation (as adapted from `CUT`) currently does not support multi-gpu training and the default batch size is 1.
 
@@ -106,9 +111,10 @@ We list the original filenames for the source and target images used in our setu
 
 <img src="examples/f2.PNG" alt="statistics" style="width:550px;"/>
 
-The numerical results below demonstrate the clear advantage of SRUNIT over the previous state-of-the-art method CUT.
+We train the previous state-of-the-art method CUT using the same code but setting `reg=0.0` (i.e., deactivating the SR loss).
+The numerical results below demonstrate the clear advantage of SRUNIT over CUT.
 
 |       | PixelAcc (%) | ClassAcc (%) | Mean IoU |
 | ----------- | ----------- | ----------------- | --------- |
 | CUT      | 74.39 | 30.61 | 23.86 |
-| SRUNIT   |   t    | t | t |
+| SRUNIT   | **78.39** | **36.70** | **28.76** |
