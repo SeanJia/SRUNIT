@@ -118,3 +118,16 @@ The numerical results below demonstrate the clear advantage of SRUNIT over CUT.
 | ----------- | ----------- | ----------------- | --------- |
 | CUT      | 74.39 | 30.61 | 23.86 |
 | SRUNIT   | **78.39** | **36.70** | **28.76** |
+
+## Citation
+If you would like to cite our paper, please refer to 
+
+```
+@inproceedings{jia2021semantically,
+  title={Semantically Robust Unpaired Image Translation for Data with Unmatched Semantics Statistics},
+  author={Jia, Zhiwei and Yuan, Bodi and Wang, Kangkang and Wu, Hong and Clifford, David and Yuan, Zhiqiang and Su, Hao},
+  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages={14273--14283},
+  year={2021}
+}
+```
